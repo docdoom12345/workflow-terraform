@@ -41,6 +41,4 @@ jobs:
           branch: test
           title: "terraform plan for approval"
           body: "review this terraform plan"
-          commit-message: "terraform plan for approval"
-          labels: "terraform-plan"
           reviewers: docdoom12345
