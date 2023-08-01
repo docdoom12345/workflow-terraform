@@ -1,4 +1,4 @@
-name: Terraform deployment on azure
+name: Terraform deployment on Azure
 run-name: azure
 on:
   push:
