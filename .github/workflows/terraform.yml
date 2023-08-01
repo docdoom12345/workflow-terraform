@@ -24,7 +24,7 @@ jobs:
       - name: create pull request for terraform plan approval
         uses: peter-evans/create-pull-request@v3
         with:
-          branch: main
+          branch: test
           title: "terraform plan for approval"
           body: "review this terraform plan"
           commit-message: "terraform plan for approval"
