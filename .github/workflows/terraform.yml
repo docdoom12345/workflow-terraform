@@ -2,7 +2,7 @@ name: Terraform deployment on azure
 run-name: azure
 on:
   push:
-    branches: [ ]
+    branches: [ main ]
 jobs:
   terraform_deploy:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
       - name: login to azure
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.azure_credentials }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: terraform init
         run: terraform init
       - name: terraform plan
