@@ -27,6 +27,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           branch: test
+          base: main
           title: "terraform plan for approval"
           body: "review this terraform plan"
           reviewers: docdoom12345
