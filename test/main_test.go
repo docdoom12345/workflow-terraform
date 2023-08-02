@@ -45,14 +45,7 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 	assert.Equal(t, expectedVMName, vmName, "VM name does not match the expected value")
 }
 func savePlanToFile(t *testing.T, planOutput string, filePath string) {
-	// Create the directory if it does not exist.
-	dir := filepath.Dir(filePath)
-	err := os.MkdirAll(dir, 0755)
-	if err != nil {
-		t.Fatalf("Error creating directory: %v", err)
-	}
-
-	// Create or overwrite the plan file.
+	// Create or overwrite the plan file in the current directory.
 	file, err := os.Create(filePath)
 	if err != nil {
 		t.Fatalf("Error creating file: %v", err)
