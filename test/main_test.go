@@ -23,8 +23,12 @@ func TestTerraformVMNames(t *testing.T) {
 	terraform.Init(t, terraformOptions)
 
 	// Run 'terraform plan' to create the plan
-	planFilePath := "test.tfplan"
-	terraform.Plan(t, terraformOptions, planFilePath)
+	planFilePath := "terraform_plan.out"
+	planCmd := exec.Command("terraform", "plan", "-out="+planFilePath)
+	planOutput, err := planCmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("Failed to run terraform plan: %v\nOutput: %s", err, string(planOutput))
+	}
 
 	// Parse the Terraform plan file and extract the Azure VM names
 	vmNames, err := extractAzureVMNamesFromPlan(planFilePath)
