@@ -16,7 +16,7 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 	terraformOptions := &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: ".",
-		PlanFilePath: "./terraform.plan"
+		PlanFilePath: "./terraform.plan",
 	}
 
 	// Run `terraform init` and `terraform plan`. The plan output will be captured in the `planOutput` variable.
