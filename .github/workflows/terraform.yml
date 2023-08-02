@@ -19,25 +19,3 @@ permissions:
   repository-projects: write
   security-events: write
   statuses: write
-jobs:
-  terraform_deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install GitHub CLI
-        run: |
-          # Install GitHub CLI
-          wget https://github.com/cli/cli/releases/download/v2.0.0/gh_2.0.0_linux_amd64.deb
-          sudo dpkg -i gh_2.0.0_linux_amd64.deb
-
-      - name: Authenticate with GitHub CLI
-        run: |
-          # Configure GitHub CLI with a Personal Access Token (PAT)
-          # Replace 'YOUR_PAT_HERE' with your actual PAT.
-          gh auth login --web
-
-
-      - name: Create Pull Request
-        run: |
-          # Use the GitHub CLI to create the pull request
-          # Replace 'base-branch' and 'feature-branch' with the actual branch names.
-          gh pr create --base main --head test --title "merge changes" --body "merge changes from test to main"
