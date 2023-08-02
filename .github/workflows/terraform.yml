@@ -38,7 +38,7 @@ jobs:
           body: |
             ## Description
             merging changes from test to main
-          token: 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
+          token: ${{ secrets.PAT_TOKEN }}
 
 
 
