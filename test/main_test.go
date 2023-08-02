@@ -18,20 +18,20 @@ func TestTerraformPlanToFile(t *testing.T) {
 	terraformOptions := &terraform.Options{
 		// Set the path to your Terraform code that will be tested.
 		TerraformDir: "../",
+		PlanFilePath: "terraform.tfplan"
 	}
 
 	// Run `terraform init` and `terraform plan` to generate the plan.
 	terraform.Init(t, terraformOptions)
 
 	// Get the plan using `terraform plan -out` command.
-	planFilePath := "../terraform.plan"
-	cmd := exec.Command("terraform", "plan", "-out", planFilePath)
+	cmd := exec.Command("terraform", "plan", "-out", terraformOptions.PlanFilePath)
 	cmd.Dir = terraformOptions.TerraformDir
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Failed to run terraform plan command: %v", err)
 	}
-	planFile, err := os.Open(planFilePath)
+	planFile, err := os.Open(terraformOptions.planFilePath)
 	if err != nil {
 		t.Fatalf("Failed to open plan file: %v", err)
 	}
