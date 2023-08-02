@@ -40,7 +40,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 	scanner := bufio.NewScanner(planFile)
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.Contains(line, "azurerm_virtual_machine.example_vm") {
+		if strings.Contains(line, "azurerm_windows_virtual_machine.example") {
 			// Assuming "azurerm_virtual_machine.example_vm" is the resource name in your Terraform configuration.
 			// Adjust it accordingly based on your actual resource name.
 			// The VM name will be in the line following the resource name.
