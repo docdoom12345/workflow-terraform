@@ -2,7 +2,7 @@ name: Terraform deployment on Azure
 run-name: azure
 on:
   push:
-    branches: [ feature ]
+    branches: [ test ]
 permissions:
   id-token: write
   contents: write
