@@ -1,68 +1,73 @@
-// main_test.go
-
 package test
 
 import (
 	"testing"
+	"encoding/json"
+	"io/ioutil"
 	"strings"
+	"fmt"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
-	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-07-01/compute"
-	"github.com/Azure/go-autorest/autorest/azure/auth"
 )
 
-func TestAzureVMName(t *testing.T) {
+func TestTerraformVMNames(t *testing.T) {
 	t.Parallel()
 
-	// Variables for the Azure VM name pattern and the Terraform example module.
-	const expectedVMNamePattern = "example-machine"
-	const terraformModulePath = "../"
-
-	// Terraform options to run during the test.
-	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: terraformModulePath,
-	})
-
-	// Terraform init, apply, and defer destroy.
-	defer terraform.Destroy(t, terraformOptions)
-	terraform.InitAndApply(t, terraformOptions)
-
-	// Get the VM name from the Terraform output.
-	vmName := terraform.Output(t, terraformOptions, "vm_name")
-
-	// Create an Azure compute client to fetch the VM details.
-	authorizer, err := auth.NewAuthorizerFromEnvironment()
-	if err != nil {
-		t.Fatalf("Failed to get Azure authorizer: %v", err)
+	// Path to your Terraform code directory
+	terraformOptions := &terraform.Options{
+		TerraformDir: ".",
 	}
 
-	vmClient := compute.NewVirtualMachinesClient(terraformOptions.Vars["azure_subscription_id"].(string))
-	vmClient.Authorizer = authorizer
+	// Run 'terraform init' to initialize the Terraform configuration
+	terraform.Init(t, terraformOptions)
 
-	// Get the VM details by resource group and VM name.
-	resourceGroup := terraformOptions.Vars["resource_group"].(string)
+	// Run 'terraform plan' to create the plan
+	planFilePath := "test.tfplan"
+	terraform.Plan(t, terraformOptions, planFilePath)
 
-	vm, err := vmClient.Get(terraformOptions.Vars["azure_vm_resource_group"].(string), resourceGroup, vmName, compute.InstanceView)
+	// Parse the Terraform plan file and extract the Azure VM names
+	vmNames, err := extractAzureVMNamesFromPlan(planFilePath)
 	if err != nil {
-		t.Fatalf("Failed to get Azure VM details: %v", err)
+		t.Fatalf("Failed to extract Azure VM names from plan: %v", err)
 	}
 
-	// Check if the VM name matches the specified pattern.
-	matched, err := MatchPattern(expectedVMNamePattern, *vm.Name)
-	if err != nil {
-		t.Fatalf("Failed to check if VM name matches pattern: %v", err)
-	}
+	// Set your expected Azure VM names here
+	expectedVMNames := []string{"example-machine"}
 
-	// Assert the match result.
-	assert.True(t, matched, "Azure VM name does not match the pattern: %s", expectedVMNamePattern)
+	// Check if the Azure VM names match the expected values
+	assert.ElementsMatch(t, expectedVMNames, vmNames, "Azure VM names should match expected values")
 }
 
-// MatchPattern checks if a given string matches the specified pattern.
-func MatchPattern(pattern, value string) (bool, error) {
-	matched, err := path.Match(pattern, value)
+func extractAzureVMNamesFromPlan(planFilePath string) ([]string, error) {
+	// Read the contents of the plan file
+	planJSON, err := ioutil.ReadFile(planFilePath)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
-	return matched, nil
+
+	// Parse the JSON content to a Terraform Plan object
+	plan := &terraform.Plan{}
+	if err := json.Unmarshal(planJSON, plan); err != nil {
+		return nil, err
+	}
+
+	// Find the resources "azurerm_virtual_machine" in the plan and extract their names
+	var vmNames []string
+	for _, resourceChange := range plan.ResourceChanges {
+		if resourceChange.Type == "azurerm_windows_virtual_machine" {
+			// Get the name attribute of the resource change
+			if nameVal, ok := resourceChange.Change.After["name"]; ok {
+				vmName := nameVal.(string)
+				vmNames = append(vmNames, vmName)
+			}
+		}
+	}
+
+	if len(vmNames) == 0 {
+		// If "azurerm_virtual_machine" resource is not found, return an error
+		return nil, fmt.Errorf("azurerm_virtual_machine resource not found in the plan")
+	}
+
+	return vmNames, nil
 }
