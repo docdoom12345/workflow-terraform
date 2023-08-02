@@ -22,14 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          commit-message: "Auto-generated pull request"
-          title: "Your pull request title"
-          body: "Your pull request description"
-          reviewers: "docdoom12345" # Optional: Request reviews from specific users
-          base: main
-          branch: test
+        run: |
+          gh pr create --base main --head test --title "Feature XYZ" --body "This pull request includes the following changes: ..."
 
 
 
