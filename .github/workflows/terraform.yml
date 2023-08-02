@@ -33,8 +33,7 @@ jobs:
         run: |
           # Configure GitHub CLI with a Personal Access Token (PAT)
           # Replace 'YOUR_PAT_HERE' with your actual PAT.
-          echo ${{ secrets.PAT_TOKEN }}
-          gu auth login
+          echo ${{ secrets.PAT_TOKEN }} | gh auth login
 
 
       - name: Create Pull Request
