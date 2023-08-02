@@ -31,6 +31,11 @@ func TestTerraformPlanToFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to run terraform plan command: %v", err)
 	}
+	planFile, err := os.Open(planFilePath)
+	if err != nil {
+		t.Fatalf("Failed to open plan file: %v", err)
+	}
+	defer planFile.Close()
 	vmName := ""
 	scanner := bufio.NewScanner(planFile)
 	for scanner.Scan() {
