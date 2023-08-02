@@ -28,7 +28,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 	// Get the plan using `terraform plan -out` command.
 	PlanFileName := "../terraform.tfplan"
 	terraform.RunTerraformCommand(t, terraformOptions, "plan" ,"-out="+PlanFileName)
-	content, err :=ioutil.ReadFile(PlanFileName")
+	content, err :=ioutil.ReadFile(PlanFileName)
 	if err != nil {
             fmt.Println("Unable to read file")
 	    os.Exit(1)
