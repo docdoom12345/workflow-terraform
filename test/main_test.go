@@ -25,7 +25,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 	terraform.Init(t, terraformOptions)
         cwd,err := os.Getwd()
 	files,err := os.ReadDir(cwd)
-	for -, file := range files {
+	for _, file := range files {
            fmt.Println(file.Name())
         }
         
