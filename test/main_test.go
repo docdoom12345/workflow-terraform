@@ -2,33 +2,41 @@ package test
 
 import (
 	"testing"
-	"io/ioutil"
+	"os/exec"
 	"os"
-	"fmt"
+	"io/ioutil"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestVMNameInTerraformPlan(t *testing.T) {
-        cwd, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting the current working directory:", err)
-		return
-	}
-        parentDir := filepath.Dir(cwd)
-	err = os.Chdir(parentDir)
-	cwd, err := os.Getwd()
-	// Read the contents of the current directory.
-	files, err := ioutil.ReadDir(cwd)
-	if err != nil {
-		fmt.Println("Error reading directory:", err)
-		return
+func TestTerraformPlanToFile(t *testing.T) {
+	t.Parallel()
+
+	// Set up Terraform options
+	terraformOptions := &terraform.Options{
+		// Set the path to your Terraform code that will be tested.
+		TerraformDir: "../",
 	}
 
-	// Loop through the list of files and print their names.
-	fmt.Println("Files in the current directory:")
-	for _, file := range files {
-		// Check if it is a regular file (not a directory).
-		if file.Mode().IsRegular() {
-			fmt.Println(file.Name())
-		}
+	// Run `terraform init` and `terraform plan` to generate the plan.
+	terraform.InitAndApply(t, terraformOptions)
+
+	// Get the plan using `terraform plan -out` command.
+	planFile, err := ioutil.TempFile("", "terraform-plan")
+	if err != nil {
+		t.Fatalf("Failed to create temporary file: %v", err)
 	}
+	defer os.Remove(planFile.Name())
+
+	cmd := exec.Command("terraform", "plan", "-out", planFile.Name())
+	cmd.Dir = terraformOptions.TerraformDir
+	err = cmd.Run()
+	if err != nil {
+		t.Fatalf("Failed to run terraform plan command: %v", err)
+	}
+
+	// At this point, the plan has been saved to a temporary file. You can process or assert on the plan as needed.
+	// For example, you can copy the plan file to a specific location or compare it against an expected plan.
+	// For simplicity, we'll just print the plan file path here:
+	t.Logf("Terraform plan saved to: %s", planFile.Name())
 }
