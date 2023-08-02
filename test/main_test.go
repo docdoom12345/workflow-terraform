@@ -22,7 +22,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 
 	// Run `terraform init` and `terraform plan` to generate the plan.
 	PlanFilePath := "../terraform.plan"
-	terraform.InitandPlanWithConfig(t, terraformOptions, PlanFilePath)
+	terraform.InitAndPlanWithConfig(t, terraformOptions, PlanFilePath)
 
 	// Get the plan using `terraform plan -out` command.
 	
