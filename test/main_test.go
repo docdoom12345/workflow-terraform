@@ -3,8 +3,8 @@ package test
 import (
 	"testing"
 	"os/exec"
-	"os"
-	"io/ioutil"
+	//"os"
+	//"io/ioutil"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
