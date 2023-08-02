@@ -44,6 +44,5 @@ jobs:
           
       - name: Run Terratest
         run: |
-          cd test/
           go mod init github.com/docdoom12345/workflow-terraform
           go test ./test -v
