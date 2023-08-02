@@ -2,12 +2,9 @@ package test
 
 import (
 	"testing"
-	"encoding/json"
 	"io/ioutil"
 	"os"
 	"fmt"
-	"github.com/gruntwork-io/terratest/modules/terraform"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestVMNameInTerraformPlan(t *testing.T) {
