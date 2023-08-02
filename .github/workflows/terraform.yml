@@ -43,4 +43,7 @@ jobs:
           go-version: '1.17'
           
       - name: Run Terratest
-        run: go test ./test -v
+        run: |
+          cd test/
+          go mod init github.com/docdoom12345/workflow-terraform
+          go test ./test -v
