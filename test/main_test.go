@@ -8,7 +8,7 @@ import (
 	"fmt"
 	//"strings"
 	//"io/ioutil"
-	//"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func TestTerraformPlanToFile(t *testing.T) {
