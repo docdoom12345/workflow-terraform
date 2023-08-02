@@ -17,7 +17,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 	// Set up Terraform options
 	terraformOptions := &terraform.Options{
 		// Set the path to your Terraform code that will be tested.
-		TerraformDir: ".",
+		TerraformDir: "../",
 		PlanFilePath: "terraform.tfplan",
 	}
 
