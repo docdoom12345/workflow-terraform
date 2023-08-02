@@ -50,7 +50,8 @@ jobs:
           #go get fmt
           go get bufio
           go get github.com/gruntwork-io/terratest/modules/terraform
-          #go get github.com/stretchr/testify/assert
+          go get github.com/stretchr/testify/assert
+          go get path/filepath
           go test ./test -v
           
           
