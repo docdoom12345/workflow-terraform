@@ -26,10 +26,15 @@ jobs:
       - name: checkout repository
         uses: actions/checkout@v2
       - name: Create Pull Request
-        run: |
-          gh pr create --base main --head test --title "Feature XYZ" --body "This pull request includes the following changes: ..."
-        env:
-          GITHUB_TOKEN: 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
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: test  # Replace with the name of the branch you want to create a PR from
+          base: main
+          title: merge changes
+          body: |
+            ## Description
+            merging changes from test to main
+          token: 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
 
 
 
