@@ -4,9 +4,9 @@ import (
 	"testing"
 	//"os/exec"
 	//"bufio"
-	//"os"
+	"os"
 	//"fmt"
-	//"strings"
+	"strings"
 	//"io/ioutil"
         //"path/filepath"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -29,4 +29,8 @@ func TestTerraformPlanToFile(t *testing.T) {
 	PlanFileName := "../terraform.tfplan"
 	terraform.RunTerraformCommand(t, terraformOptions, "plan" ,"-out="+PlanFileName)
         terraform.RunTerraformCommand(t, terraformOptions, "show" , "-json" ,PlanFileName)
+	PlanFile, err := os.open(PlanFileName)
+	if err != nil {
+           t.Fatalf("Failed to open plan file")
+	}
 }
