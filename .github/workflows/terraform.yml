@@ -32,10 +32,6 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: terraform init
-        run: terraform init
-      - name: terraform plan
-        run: terraform plan
         
       - name: Set up Go
         uses: actions/setup-go@v2
