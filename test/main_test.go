@@ -30,9 +30,9 @@ func TestTerraformPlanToFile(t *testing.T) {
 	// Get the plan using `terraform plan -out` command.
 	cmd := exec.Command("terraform", "plan", "-out", PlanFilePath)
 	cmd.Dir = terraformOptions.TerraformDir
-	err := cmd.Run()
-	if err != nil {
-		t.Fatalf("Failed to run terraform plan command: %v", err)
+	filePath := cmd.Run()
+	if filePath != nil {
+		t.Fatalf("Failed to run terraform plan command: %v", filePath)
 	}
 	planFile, err := os.Open(terraformOptions.PlanFilePath)
 	if err != nil {
