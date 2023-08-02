@@ -4,9 +4,10 @@ import (
 	"testing"
 	//"os/exec"
 	//"bufio"
-	//"os"
+	"os"
+	"fmt"
 	//"strings"
-	//"io/ioutil"
+	"io/ioutil"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
@@ -27,4 +28,10 @@ func TestTerraformPlanToFile(t *testing.T) {
 	// Get the plan using `terraform plan -out` command.
 	PlanFileName := "../terraform.tfplan"
 	terraform.RunTerraformCommand(t, terraformOptions, "plan" ,"-out="+PlanFileName)
+	content, err :=ioutil.ReadFile(PlanFileName")
+	if err != nil {
+            fmt.Println("Unable to read file")
+	    os.Exit(1)
+        }
+	fmt.Println(string(content))
 }
