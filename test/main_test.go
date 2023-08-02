@@ -30,4 +30,24 @@ func TestTerraformPlanToFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to run terraform plan command: %v", err)
 	}
+	vmName := ""
+	scanner := bufio.NewScanner(planFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "azurerm_virtual_machine.example_vm") {
+			// Assuming "azurerm_virtual_machine.example_vm" is the resource name in your Terraform configuration.
+			// Adjust it accordingly based on your actual resource name.
+			// The VM name will be in the line following the resource name.
+			scanner.Scan()
+			vmName = scanner.Text()
+			break
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		t.Fatalf("Error while scanning plan file: %v", err)
+	}
+
+	// At this point, the VM name should be stored in the "vmName" variable.
+	t.Logf("VM Name: %s", vmName)
 }
