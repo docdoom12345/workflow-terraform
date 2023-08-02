@@ -47,7 +47,7 @@ jobs:
           go get os
           go get strings
           go get os/exec
-          #go get fmt
+          go get fmt
           go get bufio
           go get github.com/gruntwork-io/terratest/modules/terraform
           go get github.com/stretchr/testify/assert
