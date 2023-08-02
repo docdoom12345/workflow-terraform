@@ -9,6 +9,37 @@ import (
 )
 
 func TestVMNameInTerraformPlan(t *testing.T) {
+        cwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error getting the current working directory:", err)
+		return
+	}
+
+	// Read the contents of the current directory.
+	files, err := ioutil.ReadDir(cwd)
+	if err != nil {
+		fmt.Println("Error reading directory:", err)
+		return
+	}
+
+	// Loop through the list of files and print their names.
+	fmt.Println("Files in the current directory:")
+	for _, file := range files {
+		// Check if it is a regular file (not a directory).
+		if file.Mode().IsRegular() {
+			fmt.Println(file.Name())
+		}
+	}
+}
+The os.Getwd() function will return the path of the current directory, which will be the root directory of your GitHub repository if you run the code from the repository's root directory.
+
+Please ensure that you have cloned your GitHub repository and executed the Go code from the repository's root directory to list the files in the root directory of your Terraform script.
+
+
+
+
+
+
 	t.Parallel()
 
 	// Set the Terraform options with the path to the Terraform code directory.
@@ -17,7 +48,7 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 		TerraformDir: ".",
 		PlanFilePath: "./terraform.plan",
 	}
-
+        
 	// Run `terraform init` and `terraform plan`. The plan output will be captured in the `planOutput` variable.
 	terraform.InitAndPlan(t, terraformOptions)
 
