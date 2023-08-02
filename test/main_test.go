@@ -16,13 +16,13 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 	terraformOptions := &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: ".",
+		PlanFilePath: "./terraform.plan"
 	}
 
 	// Run `terraform init` and `terraform plan`. The plan output will be captured in the `planOutput` variable.
-	planOutput := terraform.InitAndPlan(t, terraformOptions)
+	terraform.InitAndPlan(t, terraformOptions)
 
 	// Save the Terraform plan output to a file.
-	savePlanToFile(t, planOutput, "terraform.tfplan")
 
 	// Read the Terraform plan file.
 	planData, err := ioutil.ReadFile("terraform.tfplan")
@@ -44,20 +44,7 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 	expectedVMName := "example-machine"
 	assert.Equal(t, expectedVMName, vmName, "VM name does not match the expected value")
 }
-func savePlanToFile(t *testing.T, planOutput string, filePath string) {
-	// Create or overwrite the plan file in the current directory.
-	file, err := os.Create(filePath)
-	if err != nil {
-		t.Fatalf("Error creating file: %v", err)
-	}
-	defer file.Close()
 
-	// Write the plan output to the file.
-	_, err = file.WriteString(planOutput)
-	if err != nil {
-		t.Fatalf("Error writing to file: %v", err)
-	}
-}
 func extractVMNameFromPlan(planMap map[string]interface{}) string {
 	// Extract the root module from the plan.
 	rootModule := planMap["planned_values"].(map[string]interface{})["root_module"].(map[string]interface{})
