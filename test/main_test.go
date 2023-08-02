@@ -26,5 +26,5 @@ func TestTerraformPlanToFile(t *testing.T) {
 
 	// Get the plan using `terraform plan -out` command.
 	PlanFileName := "../terraform.tfplan"
-	terraform.RunTerraformCommand(t, terraformOptions, "plan" "-out="+PlanFileName)
+	terraform.RunTerraformCommand(t, terraformOptions, "plan" ,"-out="+PlanFileName)
 }
