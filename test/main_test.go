@@ -24,7 +24,13 @@ func TestTerraformPlanToFile(t *testing.T) {
 	// Run `terraform init` and `terraform plan` to generate the plan.
 	terraform.Init(t, terraformOptions)
         cwd,err := os.Getwd()
+	if err != nil {
+           t.Fatalf( "failed to run")
+        }
 	files,err := os.ReadDir(cwd)
+	if err != nil {
+           t.Fatalf( "failed to run")
+        }
 	for _, file := range files {
            fmt.Println(file.Name())
         }
