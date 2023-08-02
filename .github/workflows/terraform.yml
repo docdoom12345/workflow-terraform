@@ -46,4 +46,5 @@ jobs:
         run: |
           cd test/
           go mod init github.com/docdoom12345/workflow-terraform
+          go get github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2021-07-01/compute
           go test -v
