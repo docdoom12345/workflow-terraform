@@ -24,7 +24,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 
 	// Run `terraform init` and `terraform plan` to generate the plan.
 	terraform.Init(t, terraformOptions)
-        currentDir := os.Getwd()
+        currentDir, err := os.Getwd()
 	PlanFilePath := filepath.Dir(currentDir)
 	PlanFilePath += "/terraform.tfplan"
 	// Get the plan using `terraform plan -out` command.
