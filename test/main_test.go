@@ -4,8 +4,8 @@ import (
 	"testing"
 	"os/exec"
 	"bufio"
-	//"os"
-	//"strings"
+	"os"
+	"strings"
 	//"io/ioutil"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
