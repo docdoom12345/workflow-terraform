@@ -7,6 +7,9 @@ terraform {
   }
   required_version = ">1.1.0"
 }
+output "vm_name" {
+  value = azurerm_windows_virtual_machine.example.name
+}
 provider "azurerm" {
   # Configuration options
   features {}
