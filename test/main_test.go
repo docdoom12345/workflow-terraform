@@ -31,7 +31,7 @@ func TestTerraformPlanToFile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to run terraform plan command: %v", err)
 	}
-	planFile, err := os.Open(terraformOptions.planFilePath)
+	planFile, err := os.Open(terraformOptions.PlanFilePath)
 	if err != nil {
 		t.Fatalf("Failed to open plan file: %v", err)
 	}
