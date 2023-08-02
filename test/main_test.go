@@ -4,7 +4,7 @@ import (
 	"testing"
 	"encoding/json"
 	"io/ioutil"
-
+        "os"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
