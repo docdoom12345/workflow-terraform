@@ -3,6 +3,7 @@ package test
 import (
 	"testing"
 	"os/exec"
+	"bufio"
 	//"os"
 	//"strings"
 	//"io/ioutil"
