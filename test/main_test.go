@@ -19,24 +19,14 @@ func TestTerraformPlanToFile(t *testing.T) {
 	}
 
 	// Run `terraform init` and `terraform plan` to generate the plan.
-	terraform.InitAndApply(t, terraformOptions)
+	terraform.Init(t, terraformOptions)
 
 	// Get the plan using `terraform plan -out` command.
-	planFile, err := ioutil.TempFile("", "terraform-plan")
-	if err != nil {
-		t.Fatalf("Failed to create temporary file: %v", err)
-	}
-	defer os.Remove(planFile.Name())
-
-	cmd := exec.Command("terraform", "plan", "-out", planFile.Name())
+	planFilePath := "../terraform.plan"
+	cmd := exec.Command("terraform", "plan", "-out", planFilePath)
 	cmd.Dir = terraformOptions.TerraformDir
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Failed to run terraform plan command: %v", err)
 	}
-
-	// At this point, the plan has been saved to a temporary file. You can process or assert on the plan as needed.
-	// For example, you can copy the plan file to a specific location or compare it against an expected plan.
-	// For simplicity, we'll just print the plan file path here:
-	t.Logf("Terraform plan saved to: %s", planFile.Name())
 }
