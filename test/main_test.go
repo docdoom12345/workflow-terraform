@@ -4,6 +4,8 @@ import (
 	"testing"
 	"encoding/json"
 	"io/ioutil"
+	"os"
+	"fmt"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
@@ -31,10 +33,6 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 		}
 	}
 }
-The os.Getwd() function will return the path of the current directory, which will be the root directory of your GitHub repository if you run the code from the repository's root directory.
-
-Please ensure that you have cloned your GitHub repository and executed the Go code from the repository's root directory to list the files in the root directory of your Terraform script.
-
 
 
 
