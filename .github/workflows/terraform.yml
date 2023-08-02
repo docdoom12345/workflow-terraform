@@ -25,6 +25,10 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
+      - name: Set up Git
+        run: |
+          git config --global user.name "docdoom12345"
+          git config --global user.email "docdoom12345@outlook.com"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
