@@ -79,5 +79,3 @@ resource "azurerm_windows_virtual_machine" "example" {
     version   = "latest"
   }
 }
-
-
