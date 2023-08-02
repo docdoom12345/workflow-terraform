@@ -2,7 +2,7 @@ name: Terraform deployment on Azure
 run-name: azure
 on:
   push:
-    branches: [ main ]
+    branches: [ feature ]
 permissions:
   id-token: write
   contents: write
@@ -24,6 +24,8 @@ jobs:
       - name: Create Pull Request
         run: |
           gh pr create --base main --head test --title "Feature XYZ" --body "This pull request includes the following changes: ..."
+        env:
+          GITHUB_TOKEN: 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
 
 
 
