@@ -2,12 +2,12 @@ package test
 
 import (
 	"testing"
-	//"os/exec"
-	//"bufio"
+	"os/exec"
+	"bufio"
 	"os"
-	"fmt"
-	//"strings"
+	"strings"
 	//"io/ioutil"
+
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
@@ -17,28 +17,13 @@ func TestTerraformPlanToFile(t *testing.T) {
 	// Set up Terraform options
 	terraformOptions := &terraform.Options{
 		// Set the path to your Terraform code that will be tested.
-		TerraformDir: "../",
-		PlanFilePath: "../terraform.tfplan",
+		TerraformDir: ".",
+		PlanFilePath: "terraform.tfplan",
 	}
 
 	// Run `terraform init` and `terraform plan` to generate the plan.
 	terraform.Init(t, terraformOptions)
-        cwd,err := os.Getwd()
-	if err != nil {
-           t.Fatalf( "failed to run")
-        }
-	files,err := os.ReadDir(cwd)
-	if err != nil {
-           t.Fatalf( "failed to run")
-        }
-	for _, file := range files {
-           fmt.Println(file.Name())
-        }
-        
 
-
-	
-        /*
 	// Get the plan using `terraform plan -out` command.
 	cmd := exec.Command("terraform", "plan", "-out", terraformOptions.PlanFilePath)
 	cmd.Dir = terraformOptions.TerraformDir
@@ -70,5 +55,5 @@ func TestTerraformPlanToFile(t *testing.T) {
 	}
 
 	// At this point, the VM name should be stored in the "vmName" variable.
-	t.Logf("VM Name: %s", vmName)*/
+	t.Logf("VM Name: %s", vmName)
 }
