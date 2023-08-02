@@ -23,24 +23,22 @@ jobs:
   terraform_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v2
-      - name: Set up Git
+      - name: Install GitHub CLI
         run: |
-          git config --global user.name "docdoom12345"
-          git config --global user.email "docdoom12345@outlook.com"
-          git config --global credential.helper store  # Store credentials to avoid prompts
-          git remote set-url origin https://github.com/docdoom12345/workflow-terraform.git
+          # Install GitHub CLI
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh
+
+      - name: Authenticate with GitHub CLI
+        run: |
+          # Configure GitHub CLI with a Personal Access Token (PAT)
+          # Replace 'YOUR_PAT_HERE' with your actual PAT.
+          gh auth login --with-token <<< ${{ secrets.PAT_TOKEN }}
+
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: test  # Replace with the name of the branch you want to create a PR from
-          base: main
-          title: merge changes
-          body: |
-            ## Description
-            merging changes from test to main
-          token: ${{ secrets.PAT_TOKEN }}
-
-
-
+        run: |
+          # Use the GitHub CLI to create the pull request
+          # Replace 'base-branch' and 'feature-branch' with the actual branch names.
+          gh pr create --base main --head test --title "merge changes" --body "merge changes from test to main"
