@@ -3,7 +3,6 @@ run-name: azure
 on:
   push:
     branches: 
-      - test
       - main
 permissions:
   id-token: write
@@ -19,3 +18,26 @@ permissions:
   repository-projects: write
   security-events: write
   statuses: write
+jobs:
+  terraform_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.5.3
+
+      - name: terraform init
+        run: terraform init
+      - name: terraform plan
+        run: terraform plan
+        
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17'
+          
+      - name: Install dependencies
+        run: go mod download
