@@ -2,13 +2,13 @@ package test
 
 import (
 	"testing"
-	"os/exec"
+	//"os/exec"
 	//"bufio"
 	"os"
 	"fmt"
 	//"strings"
 	"io/ioutil"
-
+        "path/filepath"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
