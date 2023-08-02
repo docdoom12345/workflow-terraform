@@ -1,7 +1,7 @@
 package test
 
 import (
-	//"testing"
+	"testing"
 	//"os/exec"
 	//"bufio"
 	"os"
