@@ -42,10 +42,10 @@ jobs:
         run: |
           go mod init github.com/docdoom12345/workflow-terraform/test
           go get testing
-          go get encoding/json
+          #go get encoding/json
           go get io/ioutil
           go get os
           go get fmt
-          go get github.com/gruntwork-io/terratest/modules/terraform
-          go get github.com/stretchr/testify/assert
+          #go get github.com/gruntwork-io/terratest/modules/terraform
+          #go get github.com/stretchr/testify/assert
           go test ./test -v
