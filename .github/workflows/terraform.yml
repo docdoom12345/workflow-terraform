@@ -21,16 +21,8 @@ jobs:
   terraform_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: create pull request for terraform plan approval
-        uses: peter-evans/create-pull-request@v3
-        with:
-          branch: test
-          base: main
-          title: "terraform plan for approval"
-          body: "review this terraform plan"
-          reviewers: docdoom12345
+      - name: create pull request
+        run: gh pr create -B main -H test --title 'Merge test into main' --body 'Created by Github action'
 
 
 
