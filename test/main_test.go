@@ -13,7 +13,9 @@ func TestVMNameInTerraformPlan(t *testing.T) {
 		fmt.Println("Error getting the current working directory:", err)
 		return
 	}
-
+        parentDir := filepath.Dir(cwd)
+	err = os.Chdir(parentDir)
+	cwd, err := os.Getwd()
 	// Read the contents of the current directory.
 	files, err := ioutil.ReadDir(cwd)
 	if err != nil {
