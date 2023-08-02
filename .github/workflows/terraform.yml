@@ -21,8 +21,13 @@ jobs:
   terraform_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: create pull request
-        run: gh pr create -B main -H test --title 'Merge test into main' --body 'Created by Github action'
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: mergae changes
+          body: merge changes into main branch
+          branch: test
+          base: main
 
 
 
