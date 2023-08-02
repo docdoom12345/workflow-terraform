@@ -33,7 +33,7 @@ jobs:
         run: |
           # Configure GitHub CLI with a Personal Access Token (PAT)
           # Replace 'YOUR_PAT_HERE' with your actual PAT.
-          echo "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" | gh auth login --with-token
+          gh auth login --web
 
 
       - name: Create Pull Request
