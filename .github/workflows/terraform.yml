@@ -23,6 +23,8 @@ jobs:
   terraform_deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout repository
+        uses: actions/checkout@v2
       - name: Create Pull Request
         run: |
           gh pr create --base main --head test --title "Feature XYZ" --body "This pull request includes the following changes: ..."
