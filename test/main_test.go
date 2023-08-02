@@ -4,74 +4,86 @@ import (
 	"testing"
 	"encoding/json"
 	"io/ioutil"
-	"strings"
-	"fmt"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTerraformVMNames(t *testing.T) {
+func TestVMNameInTerraformPlan(t *testing.T) {
 	t.Parallel()
 
-	// Path to your Terraform code directory
+	// Set the Terraform options with the path to the Terraform code directory.
 	terraformOptions := &terraform.Options{
-		TerraformDir: ".",
+		// Set the path to the Terraform code that will be tested.
+		TerraformDir: "../path/to/terraform/code",
 	}
 
-	// Run 'terraform init' to initialize the Terraform configuration
-	terraform.Init(t, terraformOptions)
+	// Run `terraform init` and `terraform plan`. The plan output will be captured in the `planOutput` variable.
+	planOutput := terraform.InitAndPlan(t, terraformOptions)
 
-	// Run 'terraform plan' to create the plan
-	planFilePath := "terraform_plan.out"
-	planCmd := exec.Command("terraform", "plan", "-out="+planFilePath)
-	planOutput, err := planCmd.CombinedOutput()
+	// Save the Terraform plan output to a file.
+	savePlanToFile(t, planOutput, "terraform.tfplan")
+
+	// Read the Terraform plan file.
+	planData, err := ioutil.ReadFile("terraform.tfplan")
 	if err != nil {
-		t.Fatalf("Failed to run terraform plan: %v\nOutput: %s", err, string(planOutput))
+		t.Fatalf("Error reading plan file: %v", err)
 	}
 
-	// Parse the Terraform plan file and extract the Azure VM names
-	vmNames, err := extractAzureVMNamesFromPlan(planFilePath)
+	// Parse the JSON data from the plan file into a map.
+	var planMap map[string]interface{}
+	err = json.Unmarshal(planData, &planMap)
 	if err != nil {
-		t.Fatalf("Failed to extract Azure VM names from plan: %v", err)
+		t.Fatalf("Error unmarshaling JSON data: %v", err)
 	}
 
-	// Set your expected Azure VM names here
-	expectedVMNames := []string{"example-machine"}
+	// Extract the VM name from the plan data.
+	vmName := extractVMNameFromPlan(planMap)
 
-	// Check if the Azure VM names match the expected values
-	assert.ElementsMatch(t, expectedVMNames, vmNames, "Azure VM names should match expected values")
+	// Assert that the VM name exists and has the expected value.
+	expectedVMName := "example-machine"
+	assert.Equal(t, expectedVMName, vmName, "VM name does not match the expected value")
 }
-
-func extractAzureVMNamesFromPlan(planFilePath string) ([]string, error) {
-	// Read the contents of the plan file
-	planJSON, err := ioutil.ReadFile(planFilePath)
+func savePlanToFile(t *testing.T, planOutput string, filePath string) {
+	// Create the directory if it does not exist.
+	dir := filepath.Dir(filePath)
+	err := os.MkdirAll(dir, 0755)
 	if err != nil {
-		return nil, err
+		t.Fatalf("Error creating directory: %v", err)
 	}
 
-	// Parse the JSON content to a Terraform Plan object
-	plan := &terraform.Plan{}
-	if err := json.Unmarshal(planJSON, plan); err != nil {
-		return nil, err
+	// Create or overwrite the plan file.
+	file, err := os.Create(filePath)
+	if err != nil {
+		t.Fatalf("Error creating file: %v", err)
 	}
+	defer file.Close()
 
-	// Find the resources "azurerm_virtual_machine" in the plan and extract their names
-	var vmNames []string
-	for _, resourceChange := range plan.ResourceChanges {
-		if resourceChange.Type == "azurerm_windows_virtual_machine" {
-			// Get the name attribute of the resource change
-			if nameVal, ok := resourceChange.Change.After["name"]; ok {
-				vmName := nameVal.(string)
-				vmNames = append(vmNames, vmName)
-			}
+	// Write the plan output to the file.
+	_, err = file.WriteString(planOutput)
+	if err != nil {
+		t.Fatalf("Error writing to file: %v", err)
+	}
+}
+func extractVMNameFromPlan(planMap map[string]interface{}) string {
+	// Extract the root module from the plan.
+	rootModule := planMap["planned_values"].(map[string]interface{})["root_module"].(map[string]interface{})
+
+	// Find the resources list within the root module.
+	resources := rootModule["resources"].([]interface{})
+
+	// Iterate through the resources to find the VM resource.
+	for _, resource := range resources {
+		resourceMap := resource.(map[string]interface{})
+		resourceType := resourceMap["type"].(string)
+
+		// Assuming the VM resource is "azurerm_windows_virtual_machine".
+		if resourceType == "azurerm_windows_virtual_machine" {
+			vmName := resourceMap["values"].(map[string]interface{})["name"].(string)
+			return vmName
 		}
 	}
 
-	if len(vmNames) == 0 {
-		// If "azurerm_virtual_machine" resource is not found, return an error
-		return nil, fmt.Errorf("azurerm_virtual_machine resource not found in the plan")
-	}
-
-	return vmNames, nil
+	// Return an empty string if the VM resource is not found.
+	return ""
 }
